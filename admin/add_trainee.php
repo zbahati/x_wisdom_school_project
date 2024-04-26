@@ -1,12 +1,12 @@
-<?php 
+<?php
 session_start();
-if(!isset($_SESSION['username'])){
+if (!isset($_SESSION['username'])) {
     header('location: ../index.php?error= 😁 You are trying to hack us!');
 }
 
 include "../db/db_connect.php";
 
-if(isset($_POST['add_trainee'])){
+if (isset($_POST['add_trainee'])) {
     $fname = $_POST['fname'];
     $lname = $_POST['lname'];
     $gender = $_POST['gender'];
@@ -14,11 +14,10 @@ if(isset($_POST['add_trainee'])){
 
     $query = "INSERT INTO trainees VALUES('','$fname','$lname','$gender','$trade_id')";
     $result = mysqli_query($connect_db, $query);
-    if($result == true){
+    if ($result == true) {
         header("location: add_trainee.php?success= Trainee is added successfully");
-    }else{
+    } else {
         header("location: add_trainee.php?error= Trainee is not added successfully");
-        
     }
 }
 
@@ -26,19 +25,21 @@ if(isset($_POST['add_trainee'])){
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add trainee</title>
 </head>
+
 <body>
-<?php 
-include("message.php");
-?>
+    <?php
+    include("message.php");
+    ?>
     <h1>ADD TRAINEE</h1>
     <form action="" method="post">
         <div>
-        <input type="text" name="fname" required placeholder=" Fist name">
+            <input type="text" name="fname" required placeholder=" Fist name">
         </div>
         <div>
             <input type="text" name="lname" placeholder=" Last name">
@@ -50,7 +51,19 @@ include("message.php");
             </select>
         </div>
         <div>
-            <input type="text" name="trade_id" placeholder=" Trade id">
+            <select name="trade_id">
+                <?php
+                $query="SELECT * FROM trade";
+                $result = mysqli_query($connect_db, $query);
+                while($row = mysqli_fetch_array($result)){
+                    ?>
+                    <option value="<?php echo $row['Trade_Id'] ?>"><?php echo $row['Trade_Name']?></option>
+                    <?php
+                }
+
+
+                ?>
+            </select>
         </div>
         <div>
             <input type="submit" name="add_trainee" value=" Add trainee">
@@ -58,4 +71,5 @@ include("message.php");
     </form>
     <a href="index.php">Home</a>
 </body>
+
 </html>
